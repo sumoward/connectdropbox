@@ -24,15 +24,27 @@ class Connectdropbox:
         print ('3. Copy the authorization code.')
         code = raw_input("Enter the authorization code here: ").strip()
         print(code)
-        access_token, user_id = flow.finish(code)
-        print(access_token, user_id)
+        self.access_token, self.user_id = flow.finish(code)
+        print(self.access_token, self.user_id)
         #2VACX8KizYYAAAAAAAAAAc1_aQWJlzlbo2Y-bX3N4Zs45WyJcJuwDhdgLb6wzBYp 47045342
-        client = dropbox.client.DropboxClient(access_token)
-        print ('linked account: ', client.account_info())
+        #self.client = dropbox.client.DropboxClient(self.access_token)
+        #print ('linked account: ', self.client.account_info())
+
+    def upload_to_db(self):
+        self.access_token = 'dXlCga7-8fYAAAAAAAAAAZNXpmVWVwoECHc_sHNLlWnrw0mB7HLWulTOzp-VJRsW'
+        print(self.access_token)
+        self.client = dropbox.client.DropboxClient(self.access_token)
+        print ('linked account: ', self.client.account_info())
+        f = open('workingdraft.txt', 'rb')
+        print('here')
+        response = self.client.put_file('/magnum-opus.txt', f)
+        print ("uploaded:", response)
+
 
 if __name__ == "__main__":
     # Get your app key and secret from the Dropbox developer website
     app_key = 'zvgozr44fggmmn7'
     app_secret = 'a6po4mgso0xcs3l'
     cdb = Connectdropbox()
-    cdb.auth_dropbox(app_key, app_secret)
+    #cdb.auth_dropbox(app_key, app_secret)
+    cdb.upload_to_db()
