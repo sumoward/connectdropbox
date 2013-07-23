@@ -31,15 +31,31 @@ class Connectdropbox:
         #print ('linked account: ', self.client.account_info())
 
     def upload_to_db(self):
-        self.access_token = 'dXlCga7-8fYAAAAAAAAAAZNXpmVWVwoECHc_sHNLlWnrw0mB7HLWulTOzp-VJRsW'
-        print(self.access_token)
-        self.client = dropbox.client.DropboxClient(self.access_token)
+        self.connect()
         print ('linked account: ', self.client.account_info())
         f = open('workingdraft.txt', 'rb')
         print('here')
         response = self.client.put_file('/magnum-opus.txt', f)
         print ("uploaded:", response)
 
+    def download_from_db(self):
+        self.connect()
+        f, metadata = self.client.get_file_and_metadata('/magnum-opus.txt')
+        out = open('magnum-opus.txt', 'wb')
+        out.write(f.read())
+        out.close()
+        print (metadata)
+
+    def get_data(self):
+        self.connect()
+        print ('linked account: ', self.client.account_info())
+        folder_metadata = self.client.metadata('/')
+        print ("metadata:", folder_metadata)
+
+    def connect(self):
+        self.access_token = 'dXlCga7-8fYAAAAAAAAAAZNXpmVWVwoECHc_sHNLlWnrw0mB7HLWulTOzp-VJRsW'
+        print(self.access_token)
+        self.client = dropbox.client.DropboxClient(self.access_token)
 
 if __name__ == "__main__":
     # Get your app key and secret from the Dropbox developer website
@@ -47,4 +63,6 @@ if __name__ == "__main__":
     app_secret = 'a6po4mgso0xcs3l'
     cdb = Connectdropbox()
     #cdb.auth_dropbox(app_key, app_secret)
-    cdb.upload_to_db()
+    #cdb.upload_to_db()
+    #cdb.get_data()
+    cdb.download_from_db()
